@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    body {
+      font-family: sans-serif;
+      width: 420px;
+      margin: 0;
+      padding: 20px;
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    h3 {
+      margin-top: 0;
+      background: linear-gradient(90deg, #4a90e2, #007aff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: #fff;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 8px 12px;
+      margin: 5px 4px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      background: #4a90e2;
+      color: white;
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      background: #357ab8;
+    }
+
+    #clearFilter {
+      background: #ff6b6b;
+    }
+
+    #clearFilter:hover {
+      background: #e05252;
+    }
+
+    #clear {
+      background: #ff6b6b;
+    }
+
+    #clear:hover {
+      background: #e05252;
+    }
+
+    #export {
+      background: #2ecc71;
+    }
+
+    #export:hover {
+      background: #26b863;
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid #ddd;
+      margin: 15px 0;
+    }
+
+    #list {
+      margin-top: 15px;
+      max-height: 380px;
+      overflow-y: auto;
+      background: #ffffff;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+
+<body>
+  <h3>API Flow Watcher</h3>
+
+  <label>Domain Filter (optional):</label>
+  <input id="domain" placeholder="example.com" />
+  <button id="saveFilter">Save Filter</button>
+  <button id="clearFilter">Clear Filter</button>
+
+  <hr />
+
+  <button id="refresh">Refresh Requests</button>
+  <button id="clear">Clear</button>
+  <button id="export">Export to Postman</button>
+
+  <div id="list"></div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+
+</html>
