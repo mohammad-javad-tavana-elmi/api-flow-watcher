@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
+  <title>API Flow Watcher</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: sans-serif;
       width: 420px;
@@ -96,6 +101,35 @@
       border-radius: 6px;
       border: 1px solid #ddd;
     }
+
+    #list:empty::before {
+      content: "No requests captured yet.";
+      color: #888;
+    }
+
+    .flow {
+      margin-bottom: 10px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      background: #fafafa;
+      word-break: break-all;
+    }
+
+    .status-error {
+      color: #d63031;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      word-break: break-all;
+      margin: 4px 0;
+    }
+
+    #message {
+      min-height: 16px;
+      font-size: 12px;
+      color: #2e7d32;
+    }
   </style>
 </head>
 
@@ -106,6 +140,7 @@
   <input id="domain" placeholder="example.com" />
   <button id="saveFilter">Save Filter</button>
   <button id="clearFilter">Clear Filter</button>
+  <div id="message"></div>
 
   <hr />
 
