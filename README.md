@@ -1,4 +1,3 @@
-# chrome extension
 # API Flow Watcher – Documentation
 
 ## Overview
@@ -13,11 +12,13 @@ This extension is ideal for debugging frontend integrations, reverse-engineering
 
 ### • Real-Time Request Capturing
 
-The extension listens to all outgoing HTTP(S) requests made by the browser and stores them in chronological order.
+The extension listens to XHR/fetch requests made by web pages and stores them in chronological order. Static assets (scripts, styles, images, fonts, media) and common analytics/ad domains are ignored. The popup updates live while it is open.
+
+Captured requests survive service worker restarts, and the history is capped at the 500 most recent requests.
 
 ### • Domain Filtering
 
-You can optionally filter captured requests by specifying a domain (e.g., `example.com`) to reduce noise.
+You can optionally filter captured requests by specifying a domain (e.g., `example.com`) to reduce noise. The filter matches the domain itself and its subdomains (`example.com` matches `api.example.com`, but not `notexample.com`).
 
 ### • Request Viewer
 
@@ -26,17 +27,18 @@ Captured requests are displayed neatly inside the popup, including:
 * HTTP method
 * URL
 * Timestamp
-* Headers (optional for export)
+* Status code (or the network error, if the request failed)
+* Headers
 * Body (if available)
 
 ### • Clear & Refresh Tools
 
-* **Refresh:** Reloads the request view.
+* **Refresh:** Reloads the request view (the list also updates automatically).
 * **Clear:** Wipes captured records from the storage.
 
 ### • Export to Postman
 
-All captured requests can be exported as a Postman-compatible collection (JSON file).
+All captured requests can be exported as a Postman-compatible collection (JSON file). JSON bodies are exported as raw JSON, and form submissions as `x-www-form-urlencoded`.
 
 ---
 
@@ -49,11 +51,12 @@ API-Flow-Watcher/
 ├── background.js
 ├── popup.html
 ├── popup.js
-├── styles.css
+├── utils.js
 └── icons/
-    ├── icon16.png
-    ├── icon48.png
-    └── icon128.png
+    ├── 16.png
+    ├── 32.png
+    ├── 48.png
+    └── 128.png
 ```
 
 ---
@@ -62,7 +65,7 @@ API-Flow-Watcher/
 
 ### 1. Background Service Worker
 
-The `background.js` file uses Chrome's `webRequest` API to listen for all outgoing requests. Each request is normalized into a structured format and saved into Chrome's `storage.local`.
+The `background.js` file uses Chrome's `webRequest` API to listen for XHR/fetch requests. Each request is normalized into a structured format and saved into Chrome's `storage.local`. Headers, status codes and errors are matched to their request by Chrome's `requestId`, so repeated calls to the same URL are tracked correctly.
 
 ### 2. Popup UI
 
@@ -89,17 +92,17 @@ The extension converts captured requests into a valid Postman Collection JSON th
 
 Your `manifest.json` includes:
 
-### `webRequest` / 
+### `webRequest`
 
 Allows the extension to observe network requests.
 
-### `tabs`
-
-Required for retrieving the active tab during export or context-specific operations.
-
 ### `storage`
 
-Used for storing the request logs.
+Used for storing the request logs and the domain filter.
+
+### `unlimitedStorage`
+
+Lifts the default storage quota so large request bodies don't cause saving to fail.
 
 ### `host_permissions: "<all_urls>"`
 
@@ -131,7 +134,7 @@ Navigate the website you're testing. All requests will automatically be logged.
 
 ### 4. Refresh
 
-Reloads the display of requests inside the popup.
+The list updates live while the popup is open; **Refresh** reloads it manually.
 
 ### 5. Clear
 
@@ -153,8 +156,7 @@ Click **Export** to download a ready-to-import Postman collection.
 
 ### Export doesn’t work
 
-* Ensure requests were captured.
-* Check that `popup.js` has permission to download files.
+* Ensure requests were captured (the popup shows "Nothing to export" otherwise).
 
 ---
 
